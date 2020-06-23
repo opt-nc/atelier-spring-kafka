@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Spring for Apache Kafka</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-image="img/spring.jpg" data-background-opacity="0.5">
+					<h1>Spring for Apache Kafka</h1>
+				</section>
+				<section>
+					<h2>RIP opt-kakfa</h2>
+					<ul>
+						<li>abandon de la lib opt-kafka (utilisation de la lib Apache Kafka) au profit de Spring for Apache Kafka</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Développement d'un producer</h2>
+					<h3>Exemple de OPT-ISEE</h3>
+				</section>
+				<section>
+					<h3>Maven</h3>
+					<pre><code class="xml">
+					<dependency>
+					<groupId>org.springframework.kafka</groupId>
+					<artifactId>spring-kafka</artifactId>
+					</dependency>
+					</code></pre>
+
+					<h3>Gradle</h3>
+					<pre><code>compile 'org.springframework.kafka:spring-kafka'</code></pre>
+				</section>
+				<section>
+					<h3>Configuration</h3>
+					<pre><code>
+@Configuration
+public class KafkaConfiguration {
+
+    @Autowired
+    private KafkaProperties kafkaProperties;
+
+    public static final String ENTREPRISE_KAFKA_TOPIC = "isee.entreprise";
+    public static final String ETABLISSEMENT_KAFKA_TOPIC = "isee.etablissement";
+
+    @Bean
+    public ProducerFactory&#60;String, String> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    @Bean
+    public Map&#60;String, Object> producerConfigs() {
+        Map&#60;String, Object> kafkaProps = new HashMap<>();
+        kafkaProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
+        kafkaProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        kafkaProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        kafkaProps.put(ProducerConfig.ACKS_CONFIG, "all");
+        kafkaProps.put(ProducerConfig.RETRIES_CONFIG, "1");
+        kafkaProps.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "1");
+        kafkaProps.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, "22020096");
+        return kafkaProps;
+    }
+
+    @Bean
+    public KafkaTemplate&#60;String, String> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public KafkaAdmin admin() {
+        Map&#60;String, Object> configs = new HashMap<>();
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
+        return new KafkaAdmin(configs);
+    }
+
+}
+					</code></pre>
+				</section>
+				<section>
+					<h3>Producer</h3>
+					<pre><code data-line-numbers="7|15-18">
+@Service
+public class ProducerService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProducerService.class);
+
+    private KafkaTemplate&#60;String, String> kafkaTemplate;
+
+    public ProducerService(KafkaTemplate&#60;String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    public SendResult&#60;String, String> push(String topic, String key, Object data, ObjectMapper objectMapper) {
+        try {
+            String json = objectMapper.writeValueAsString(data);
+            ProducerRecord&#60;String, String> record = new ProducerRecord<>(topic, key, json);
+            LOGGER.debug("Envoi Kafka : topic=[{}], key=[{}], message=[{}]", record.topic(), record.key(), record.value());
+            return kafkaTemplate.send(record).get();
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(String.format("Erreur de serialization de l'objet %s destiné au topic %s", key, topic), e);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(String.format("Erreur lors de l'envoi de l'objet %s destiné au topic %s", key, topic), e);
+        }
+    }
+}
+					</code>
+					</pre>
+				</section>
+				<section>
+					<h2>Développement d'un consumer</h2>
+				</section>
+				<section>
+					<h2>Tests</h2>
+				</section>
+				<section>
+					<h2>Problèmatique de la création de nouveau topics</h2>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
