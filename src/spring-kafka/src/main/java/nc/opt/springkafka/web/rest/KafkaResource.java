@@ -1,5 +1,7 @@
-package nc.opt.springkafka;
+package nc.opt.springkafka.web.rest;
 
+import nc.opt.springkafka.service.KafkaService;
+import nc.opt.springkafka.dto.MessageDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,12 @@ public class KafkaResource {
 
         SendResult<String, String> result = kafkaService.push(messageDTO);
         return ResponseEntity.ok().body(result.toString());
+    }
 
+    @PostMapping("/sendAsync")
+    public void sendKafkaAsync(@RequestBody MessageDTO messageDTO) {
+        log.info("Requete REST pour envoyer un message en asynchrone dans Kafka : [{}]", messageDTO);
+
+        kafkaService.push(messageDTO);
     }
 }

@@ -1,4 +1,4 @@
-package nc.opt.springkafka;
+package nc.opt.springkafka.config;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

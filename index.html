@@ -22,20 +22,25 @@
 				<section>
 					<h2>RIP opt-kakfa</h2>
 					<ul>
+						<li>non maintenue</li>
 						<li>abandon de la lib opt-kafka (utilisation de la lib Apache Kafka) au profit de Spring for Apache Kafka</li>
 					</ul>
 				</section>
 				<section>
-					<h2>Développement d'un producer</h2>
-					<h3>Exemple de OPT-ISEE</h3>
+					<h2>Producer</h2>
+					<ul>
+						<li>Produit des données sur les topics</li>
+						<li>Il est responsable d'assigner la données à une partition du topic</li>
+						<li>Peut attendre un ACK pour savoir si la donnée à bien été transmise</li>
+					</ul>
 				</section>
 				<section>
 					<h3>Maven</h3>
 					<pre><code class="xml">
-					<dependency>
-					<groupId>org.springframework.kafka</groupId>
-					<artifactId>spring-kafka</artifactId>
-					</dependency>
+<dependency>
+   <groupId>org.springframework.kafka</groupId>
+   <artifactId>spring-kafka</artifactId>
+</dependency>
 					</code></pre>
 
 					<h3>Gradle</h3>
@@ -87,9 +92,8 @@ public class KafkaConfiguration {
 					</code></pre>
 				</section>
 				<section>
-					<h3>Producer</h3>
-					<pre><code data-line-numbers="7|15-18">
-@Service
+					<h3>Producer mode synchrone</h3>
+					<pre width="100%"><code data-line-numbers="7|15-18">@Service
 public class ProducerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProducerService.class);
@@ -118,14 +122,88 @@ public class ProducerService {
 					</pre>
 				</section>
 				<section>
-					<h2>Développement d'un consumer</h2>
+					<h3>Producer mode asynchrone</h3>
+					<pre>
+						<code data-line-numbers="3|16-17|20-30">@Service
+public class ProducerService {
+  private KafkaTemplate&#60;String, String> kafkaTemplate;
+
+    public KafkaService(KafkaTemplate&#60;String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+ // Envoi asynchrone du message
+ public void pushAsync(MessageDTO messageDTO) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    String json = null;
+    try {
+         json = objectMapper.writeValueAsString(messageDTO);
+         String uuid = UUID.randomUUID().toString();
+         ListenableFuture&#60;SendResult&#60;String, String>> future =
+              kafkaTemplate.send(messageTopic, json);
+
+         String finalJson = json;
+         future.addCallback(new ListenableFutureCallback&#60;SendResult&#60;String, String>>() {
+		   @Override
+		    public void onSuccess(SendResult&#60;String, String> result) {
+				System.out.println("Sent message=[" + finalJson +
+				   "] with offset=[" + result.getRecordMetadata().offset() + "]");
+			 }
+		   @Override
+		   public void onFailure(Throwable ex) {
+			  System.out.println("Unable to send message=["
+					+ finalJson + "] due to : " + ex.getMessage());
+		   }
+         });
+
+    } catch (JsonProcessingException e) {
+        e.printStackTrace();
+    }
+ }
+}					</code>
+					</pre>
 				</section>
+				<section>
+					<h2>Consumer</h2>
+					<ul>
+						<li>Appartient à un consumer group name</li>
+						<li>Chaque message publié dans un topic est délivré à un seul consumer d'un group name</li>
+					</ul>
+				</section>
+				<section>
+				<pre>
+						<code data-line-numbers="6-11">@Component
+public class KafkaConsumer {
+
+   private final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
+
+   @KafkaListener(id = "messageListener", topics = "${opt.kafka.topics.message}", groupId = "messageG1")
+   public void messageListener(ConsumerRecord&#60;String, String> record) throws JsonProcessingException {
+      log.info("Reception enregistrement brut de messageListener : [{}]", record);
+      ObjectMapper objectMapper = new ObjectMapper();
+      MessageDTO messageDTO = objectMapper.readValue(record.value(), MessageDTO.class);
+      log.info("Reception message de messageListener : [{}]", messageDTO);
+   }
+}
+							</code></pre>
+				</section>
+
+				<section>
+					<h2>Consumer Stream</h2>
+					<ul>
+						<li>Kafka permet de faire des opérations entre topic en temps réel: aggregation / jointure ...</li>
+						<li>Les consumers consomment les données dans l'ordre où elles ont été enregistrées</li>
+					</ul>
+				</section>
+
 				<section>
 					<h2>Tests</h2>
 				</section>
 				<section>
 					<h2>Problèmatique de la création de nouveau topics</h2>
 				</section>
+
+
 
 			</div>
 		</div>

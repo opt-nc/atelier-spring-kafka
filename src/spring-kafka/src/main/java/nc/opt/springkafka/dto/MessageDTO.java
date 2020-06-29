@@ -1,4 +1,4 @@
-package nc.opt.springkafka;
+package nc.opt.springkafka.dto;
 
 public class MessageDTO {
 
