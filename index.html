@@ -1,113 +1,114 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>Spring for Apache Kafka</title>
+        <title>Spring for Apache Kafka</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/black.css" id="theme">
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section data-background-image="img/spring.jpg" data-background-opacity="0.5">
-					<h1>Spring for Apache Kafka</h1>
-				</section>
-				<section>
-					<h2>RIP opt-kakfa</h2>
-					<ul>
-						<li>non maintenue</li>
-						<li>abandon de la lib opt-kafka (utilisation de la lib Apache Kafka) au profit de Spring for Apache Kafka</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Producer</h2>
-					<ul>
-						<li>Produit des données sur les topics</li>
-						<li>Il est responsable d'assigner la données à une partition du topic</li>
-						<li>Peut attendre un ACK pour savoir si la donnée à bien été transmise</li>
-					</ul>
-				</section>
-				<section>
-					<h3>Maven</h3>
-					<pre><code class="xml">
-<dependency>
+        <!-- Theme used for syntax highlighted code -->
+        <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-background-image="img/spring.jpg" data-background-opacity="0.5">
+
+                    <img style="-webkit-filter:drop-shadow(0px 0px 6px black); filter:drop-shadow(0px 0px 6px black);" src="img/icons/springframework.png">
+                    <img src="img/icons/kafka.png">
+
+                    <h1 style="text-shadow: 0px 0px 7px black">Spring for Apache Kafka</h1>
+                </section>
+                <section>
+                    <h2>RIP opt-kakfa</h2>
+                    <ul>
+                        <li>Non maintenue</li>
+                        <li>Abandon de la lib <span style="color: turquoise">opt-kafka</span> (utilisation de la lib Apache Kafka) au profit de <span style="color: chartreuse">Spring for Apache Kafka</span></li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Producer</h2>
+                    <ul>
+                        <li>Produit des données sur les topics</li>
+                        <li>Il est responsable d'assigner la données à une partition du topic</li>
+                        <li>Peut attendre un ACK pour savoir si la donnée à bien été transmise</li>
+                    </ul>
+                </section>
+                <section>
+                    MAVEN
+                    <pre><code class="xml"><dependency>
    <groupId>org.springframework.kafka</groupId>
    <artifactId>spring-kafka</artifactId>
-</dependency>
-					</code></pre>
-
-					<h3>Gradle</h3>
-					<pre><code>compile 'org.springframework.kafka:spring-kafka'</code></pre>
-				</section>
-				<section>
-					<h3>Configuration</h3>
-					<pre><code>
-@Configuration
+</dependency></code></pre>
+                    GRADLE
+                    <pre><code>compile 'org.springframework.kafka:spring-kafka'</code></pre>
+                    PROPRIÉTÉS
+                    <pre><code class="properties">spring.kafka.bootstrap-servers=${KAFKA_BROKERS_HOST}</code></pre>
+                </section>
+                <section>
+                    <h4>Configuration</h4>
+                    <pre><code data-line-numbers="4-5|15-26|28-31">@Configuration
 public class KafkaConfiguration {
 
     @Autowired
     private KafkaProperties kafkaProperties;
 
-    public static final String ENTREPRISE_KAFKA_TOPIC = "isee.entreprise";
-    public static final String ETABLISSEMENT_KAFKA_TOPIC = "isee.etablissement";
+    public static final String ENTREPRISE_KAFKA_TOPIC = &quot;isee.entreprise&quot; ;
+    public static final String ETABLISSEMENT_KAFKA_TOPIC = &quot;isee.etablissement&quot; ;
 
     @Bean
-    public ProducerFactory&#60;String, String> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    public ProducerFactory&lt;String, String&gt; producerFactory() {
+        return new DefaultKafkaProducerFactory&lt;&gt;(producerConfigs());
     }
 
     @Bean
-    public Map&#60;String, Object> producerConfigs() {
-        Map&#60;String, Object> kafkaProps = new HashMap<>();
+    public Map&lt;String, Object&gt; producerConfigs() {
+        Map&lt;String, Object&gt; kafkaProps = new HashMap&lt;&gt;();
         kafkaProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         kafkaProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         kafkaProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        kafkaProps.put(ProducerConfig.ACKS_CONFIG, "all");
-        kafkaProps.put(ProducerConfig.RETRIES_CONFIG, "1");
-        kafkaProps.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "1");
-        kafkaProps.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, "22020096");
+        kafkaProps.put(ProducerConfig.ACKS_CONFIG, &quot;all&quot;);
+        kafkaProps.put(ProducerConfig.RETRIES_CONFIG, &quot;1&quot;);
+        kafkaProps.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, &quot;1&quot;);
+        kafkaProps.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, &quot;22020096&quot;);
         return kafkaProps;
     }
 
     @Bean
-    public KafkaTemplate&#60;String, String> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate&lt;String, String&gt; kafkaTemplate() {
+        return new KafkaTemplate&lt;&gt;(producerFactory());
     }
 
     @Bean
     public KafkaAdmin admin() {
-        Map&#60;String, Object> configs = new HashMap<>();
+        Map&lt;String, Object&gt; configs = new HashMap&lt;&gt;();
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         return new KafkaAdmin(configs);
     }
 
-}
-					</code></pre>
-				</section>
-				<section>
-					<h3>Producer mode synchrone</h3>
-					<pre width="100%"><code data-line-numbers="7|15-18">@Service
+}</code></pre>
+                </section>
+                <section>
+                    <h4>Producer mode synchrone</h4>
+                    <pre><code data-line-numbers="6|15-18">@Service
 public class ProducerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProducerService.class);
 
-    private KafkaTemplate&#60;String, String> kafkaTemplate;
+    private KafkaTemplate&lt;String, String&gt; kafkaTemplate;
 
-    public ProducerService(KafkaTemplate&#60;String, String> kafkaTemplate) {
+    public ProducerService(KafkaTemplate&lt;String, String&gt; kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public SendResult&#60;String, String> push(String topic, String key, Object data, ObjectMapper objectMapper) {
+    public SendResult&lt;String, String&gt; push(String topic, String key, Object data, ObjectMapper objectMapper) {
         try {
             String json = objectMapper.writeValueAsString(data);
-            ProducerRecord&#60;String, String> record = new ProducerRecord<>(topic, key, json);
+            ProducerRecord&lt;String, String&gt; record = new ProducerRecord&gt;(topic, key, json);
             LOGGER.debug("Envoi Kafka : topic=[{}], key=[{}], message=[{}]", record.topic(), record.key(), record.value());
             return kafkaTemplate.send(record).get();
 
@@ -117,18 +118,15 @@ public class ProducerService {
             throw new RuntimeException(String.format("Erreur lors de l'envoi de l'objet %s destiné au topic %s", key, topic), e);
         }
     }
-}
-					</code>
-					</pre>
-				</section>
-				<section>
-					<h3>Producer mode asynchrone</h3>
-					<pre>
-						<code data-line-numbers="3|16-17|20-30">@Service
+}</code></pre>
+                </section>
+                <section>
+                    <h4>Producer mode asynchrone</h4>
+                    <pre><code data-line-numbers="3|16-17|20-30">@Service
 public class ProducerService {
-  private KafkaTemplate&#60;String, String> kafkaTemplate;
+  private KafkaTemplate&lt;String, String&gt; kafkaTemplate;
 
-    public KafkaService(KafkaTemplate&#60;String, String> kafkaTemplate) {
+    public KafkaService(KafkaTemplate&lt;String, String&gt; kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -139,40 +137,38 @@ public class ProducerService {
     try {
          json = objectMapper.writeValueAsString(messageDTO);
          String uuid = UUID.randomUUID().toString();
-         ListenableFuture&#60;SendResult&#60;String, String>> future =
+         ListenableFuture&lt;SendResult&lt;String, String&gt;&gt; future =
               kafkaTemplate.send(messageTopic, json);
 
          String finalJson = json;
-         future.addCallback(new ListenableFutureCallback&#60;SendResult&#60;String, String>>() {
-		   @Override
-		    public void onSuccess(SendResult&#60;String, String> result) {
-				System.out.println("Sent message=[" + finalJson +
-				   "] with offset=[" + result.getRecordMetadata().offset() + "]");
-			 }
-		   @Override
-		   public void onFailure(Throwable ex) {
-			  System.out.println("Unable to send message=["
-					+ finalJson + "] due to : " + ex.getMessage());
-		   }
+         future.addCallback(new ListenableFutureCallback&lt;SendResult&lt;String, String&gt;&gt;() {
+           @Override
+            public void onSuccess(SendResult&lt;String, String&gt; result) {
+                System.out.println("Sent message=[" + finalJson +
+                   "] with offset=[" + result.getRecordMetadata().offset() + "]");
+             }
+           @Override
+           public void onFailure(Throwable ex) {
+              System.out.println("Unable to send message=["
+                    + finalJson + "] due to : " + ex.getMessage());
+           }
          });
 
     } catch (JsonProcessingException e) {
         e.printStackTrace();
     }
  }
-}					</code>
-					</pre>
-				</section>
-				<section>
-					<h2>Consumer</h2>
-					<ul>
-						<li>Appartient à un consumer group name</li>
-						<li>Chaque message publié dans un topic est délivré à un seul consumer d'un group name</li>
-					</ul>
-				</section>
-				<section>
-				<pre>
-						<code data-line-numbers="6-11">@Component
+}</code></pre>
+                </section>
+                <section>
+                    <h2>Consumer</h2>
+                    <ul>
+                        <li>Appartient à un consumer group name</li>
+                        <li>Chaque message publié dans un topic est délivré à un seul consumer d'un group name</li>
+                    </ul>
+                </section>
+                <section>
+                <pre><code data-line-numbers="6|7-11">@Component
 public class KafkaConsumer {
 
    private final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
@@ -184,44 +180,217 @@ public class KafkaConsumer {
       MessageDTO messageDTO = objectMapper.readValue(record.value(), MessageDTO.class);
       log.info("Reception message de messageListener : [{}]", messageDTO);
    }
+}</code></pre>
+                </section>
+
+                <section>
+                    <h2>Consumer Stream</h2>
+                    <ul>
+                        <li>Kafka permet de faire des opérations entre topic en temps réel: aggregation / jointure ...</li>
+                        <li>Les consumers consomment les données dans l'ordre où elles ont été enregistrées</li>
+                    </ul>
+                </section>
+
+                <section data-background-image="img/tests.png" data-background-opacity="0.15">
+                    <h2>Tests</h2>
+                    MAVEN
+                    <pre><code class="xml"><dependency>
+   <groupId>org.springframework.kafka</groupId>
+   <artifactId>spring-kafka-test</artifactId>
+   <scope>test</scope>
+</dependency></code></pre>
+                    GRADLE
+                    <pre><code>testCompile 'org.springframework.kafka:spring-kafka-test'</code></pre>
+                </section>
+                <section>
+                    <h4>Producer</h4>
+                    <pre><code data-line-numbers="1-5|15-16|44-51|29|36-40">@RunWith(SpringRunner.class)
+@EmbeddedKafka(topics = {"${opt.kafka.topics.message}"})
+@SpringBootTest(
+        properties = "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
+        classes = {KafkaService.class, KafkaAutoConfiguration.class})
+public class KafkaServiceTest {
+
+    @Value(value = "${opt.kafka.topics.message}")
+    private String messageTopic;
+
+    @Autowired
+    private KafkaService kafkaService;
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafka;
+
+    private static final String AUTHOR = "Great Leader";
+    private static final String BODY = "Dear %{Recipient}, foo, Kind Regards";
+    private static final Long ID = 12345L;
+    private static final String RECIPIENT = "World";
+    private static final String SUBJECT = "Hello world";
+
+    @Test
+    public void push() {
+        final Consumer&lt;String, String&gt; consumer = buildConsumer();
+
+        MessageDTO m = createMessageDTO();
+        SendResult&lt;String, String&gt; result = kafkaService.push(m);
+
+        Assert.assertNotNull(result);
+
+        String value = result.getProducerRecord().value();
+        String key = result.getProducerRecord().key();
+
+        embeddedKafka.consumeFromEmbeddedTopics(consumer, messageTopic);
+        final ConsumerRecord&lt;String, String&gt; record = getSingleRecord(consumer, messageTopic, 10_000);
+
+        assertThat(record, hasValue(value));
+        assertThat(record, hasKey(key));
+
+    }
+
+    private &lt;K, V&gt; Consumer&lt;K, V&gt; buildConsumer() {
+        final Map&lt;String, Object&gt; props = KafkaTestUtils.consumerProps("g1", "true", embeddedKafka);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+
+        final DefaultKafkaConsumerFactory&lt;K, V&gt; consumerFactory = new DefaultKafkaConsumerFactory&lt;&gt;(props);
+        return consumerFactory.createConsumer();
+    }
+
+    private MessageDTO createMessageDTO() {
+        MessageDTO m = new MessageDTO();
+        m.setAuthor(AUTHOR);
+        m.setBody(BODY);
+        m.setId(ID);
+        m.setRecipient(RECIPIENT);
+        m.setSubject(SUBJECT);
+        return m;
+    }
+
+}</code></pre>
+                </section>
+                <section>
+                    <h4>Consumer</h4>
+                    <pre><code data-line-numbers="1-5|47-51|38|40-41">@RunWith(SpringRunner.class)
+@EmbeddedKafka(topics = {"${opt.kafka.topics.message}"})
+@SpringBootTest(
+        properties = "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
+        classes = {KafkaConsumer.class, KafkaAutoConfiguration.class})
+public class KafkaConsumerTest {
+
+    @Autowired
+    private KafkaConsumer kafkaConsumer;
+
+    @Value(value = "${opt.kafka.topics.message}")
+    private String messageTopic;
+
+    @Autowired
+    private KafkaTemplate&lt;String, String&gt; kafkaTemplate;
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafka;
+
+    private static final String AUTHOR = "Great Leader";
+    private static final String BODY = "Dear %{Recipient}, foo, Kind Regards";
+    private static final Long ID = 12345L;
+    private static final String RECIPIENT = "World";
+    private static final String SUBJECT = "Hello world";
+    private static final String UID = UUID.randomUUID().toString();
+
+    @Test
+    public void receive() throws JsonProcessingException, InterruptedException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        kafkaTemplate = new KafkaTemplate&lt;&gt;(buildProducer());
+        kafkaTemplate.setDefaultTopic(messageTopic);
+        MessageDTO m = createMessageDTO();
+        String json = objectMapper.writeValueAsString(m);
+
+        ProducerRecord&lt;String, String&gt; record = new ProducerRecord&lt;&gt;(messageTopic, UID, json);
+
+        kafkaTemplate.send(record);
+
+        kafkaConsumer.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        assertThat(kafkaConsumer.getLatch().getCount()).isEqualTo(0);
+
+    }
+
+
+
+    private ProducerFactory&lt;String, String&gt; buildProducer() {
+        final Map&lt;String, Object&gt; props = KafkaTestUtils.producerProps(embeddedKafka.getBrokersAsString());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        return new DefaultKafkaProducerFactory&lt;&gt;(props);
+    }
+
+    private MessageDTO createMessageDTO() {
+        MessageDTO m = new MessageDTO();
+        m.setAuthor(AUTHOR);
+        m.setBody(BODY);
+        m.setId(ID);
+        m.setRecipient(RECIPIENT);
+        m.setSubject(SUBJECT);
+        return m;
+    }
+
 }
-							</code></pre>
+
+                    </code></pre>
+                </section>
+                <section data-background-image="img/docker.png" data-background-opacity="0.3">
+                    <h3>développement en local</h3>
+                    <pre><code class="yml" data-line-numbers="4-8|10-20">version: "3"
+services:
+
+    zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    container_name: zookeeper
+    expose:
+        - "2181"
+
+    kafka:
+    image: wurstmeister/kafka:2.11-2.0.0
+    container_name: kafka
+    depends_on:
+        - zookeeper
+    ports:
+        - "9092:9092"
+    environment:
+        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+        KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Problèmatique de la création de nouveau topics</h2>
 				</section>
-
-				<section>
-					<h2>Consumer Stream</h2>
-					<ul>
-						<li>Kafka permet de faire des opérations entre topic en temps réel: aggregation / jointure ...</li>
-						<li>Les consumers consomment les données dans l'ordre où elles ont été enregistrées</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Tests</h2>
-				</section>
-				<section>
-					<h2>Problèmatique de la création de nouveau topics</h2>
-				</section>
+                <section>
+					<h4>Projet utilisant <span style="color: chartreuse">org.springframework.kafka</span></h4>
+					<li>
+						<ul>OPTISEE</ul>
+					</li>
+                </section>
 
 
 
-			</div>
-		</div>
+            </div>
+        </div>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
-
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script>
+            // More info about initialization & config:
+            // - https://revealjs.com/initialization/
+            // - https://revealjs.com/config/
+            Reveal.initialize({
+                hash: true,
+                slideNumber: 'c/t',
+                // Learn about plugins: https://revealjs.com/plugins/
+                plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+            });
+        </script>
+    </body>
 </html>
