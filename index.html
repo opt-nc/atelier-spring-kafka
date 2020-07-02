@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -24,6 +24,44 @@
                     <h1 style="text-shadow: 0px 0px 7px black">Spring for Apache Kafka</h1>
                 </section>
                 <section>
+                    <h3>Mais c’est quoi Apache Kafka ?</h3>
+                    <ul>
+                        <li>Système de stockage de flux de messages (streams of records)</li>
+                        <li>Asynchrone</li>
+                        <li>Permet de gérer des gros volumes de données, faible latence</li>
+                        <li>Tout en assurant une sécurité des données</li>
+                        <li>Aucun type de message, que des streams</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Messages</h3>
+                    <ul>
+                        <li>Composés d’une valeur, d’une clé, et d’un timestamp</li>
+                        <li>Sont organisés en catégories appelées topics</li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h3>Topics / Consumer / Producer</h3>
+                        <img style="width: 70%;" data-src="img/log_consumer.png">
+                    </section>
+                    <section>
+                        <ul>
+                            <li>Les topics ne sont pas modifiables à l’exception de l’ajout de messages à la fin</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <ul>
+                            <li>Le producer ajoute des messages à la fin des topics de son choix</li>
+                            <li>Le consumer lit des topics toujours dans l’ordre, c’est-à-dire du plus ancien message au plus récent</li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <h3>Plateforme de streaming distribuée</h3>
+                    <img style="width: 70%;" data-src="img/kafka-apis.png">
+                </section>
+                <section>
                     <h2>RIP opt-kakfa</h2>
                     <ul>
                         <li>Non maintenue</li>
@@ -31,16 +69,9 @@
                     </ul>
                 </section>
                 <section>
-                    <h2>Producer</h2>
-                    <ul>
-                        <li>Produit des données sur les topics</li>
-                        <li>Il est responsable d'assigner la données à une partition du topic</li>
-                        <li>Peut attendre un ACK pour savoir si la donnée à bien été transmise</li>
-                    </ul>
-                </section>
-                <section>
+                    <h3>Spring Apache for Kafka</h3>
                     MAVEN
-                    <pre><code class="xml"><dependency>
+<pre><code class="xml"><dependency>
    <groupId>org.springframework.kafka</groupId>
    <artifactId>spring-kafka</artifactId>
 </dependency></code></pre>
@@ -49,6 +80,15 @@
                     PROPRIÉTÉS
                     <pre><code class="properties">spring.kafka.bootstrap-servers=${KAFKA_BROKERS_HOST}</code></pre>
                 </section>
+                <section>
+                    <h2>Producer</h2>
+                    <ul>
+                        <li>Produit des données sur les topics</li>
+<!--                        <li>Il est responsable d'assigner la données à une partition du topic</li>-->
+                        <li>Peut attendre un ACK pour savoir si la donnée a bien été transmise</li>
+                    </ul>
+                </section>
+
                 <section>
                     <h4>Configuration</h4>
                     <pre><code data-line-numbers="4-5|15-26|28-31">@Configuration
@@ -93,7 +133,7 @@ public class KafkaConfiguration {
 }</code></pre>
                 </section>
                 <section>
-                    <h4>Producer mode synchrone</h4>
+                    <h4>Producer avec ACK</h4>
                     <pre><code data-line-numbers="6|15-18">@Service
 public class ProducerService {
 
@@ -186,8 +226,8 @@ public class KafkaConsumer {
                 <section>
                     <h2>Consumer Stream</h2>
                     <ul>
-                        <li>Kafka permet de faire des opérations entre topic en temps réel: aggregation / jointure ...</li>
-                        <li>Les consumers consomment les données dans l'ordre où elles ont été enregistrées</li>
+                        <li>Permet de développer des unités de traitement de messages au fil de l’eau (streaming).</li>
+                        <li>Permet de faire des opérations entre topic en temps réel: aggregation / jointure ...</li>
                     </ul>
                 </section>
 
@@ -363,17 +403,25 @@ services:
                     </code></pre>
                 </section>
                 <section>
-                    <h2>Problèmatique de la création de nouveau topics</h2>
-				</section>
+                    <h3>Problèmatique de la création de nouveaux topics</h3>
+                    <ul>
+                        <li>Le producer crée automatiquement le topic s'il n'existe pas</li>
+                        <li>Duplication de la donnée</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Solution</h3>
+                    <ul>
+                        <li>Consulter le GLIA avant toute création de topic</li>
+                        <li>A venir : mise en place par le GLIA d'un référenciel des topics</li>
+                    </ul>
+                </section>
                 <section>
 					<h4>Projet utilisant <span style="color: chartreuse">org.springframework.kafka</span></h4>
 					<li>
 						<ul>OPTISEE</ul>
 					</li>
                 </section>
-
-
-
             </div>
         </div>
 

@@ -1,4 +1,4 @@
-package nc.opt.springkafka;
+package nc.opt.springkafka.consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
