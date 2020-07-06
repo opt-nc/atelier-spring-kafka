@@ -1,5 +1,7 @@
 package nc.opt.springkafka;
 
+import nc.opt.springkafka.consumer.KafkaConsumer;
+import nc.opt.springkafka.dto.MessageDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.producer.ProducerConfig;

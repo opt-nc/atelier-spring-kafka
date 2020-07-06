@@ -1,5 +1,7 @@
 package nc.opt.springkafka;
 
+import nc.opt.springkafka.service.KafkaService;
+import nc.opt.springkafka.dto.MessageDTO;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
