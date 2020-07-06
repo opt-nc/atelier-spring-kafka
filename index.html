@@ -261,6 +261,14 @@ public class KafkaConsumer {
                         <li>Permet de faire des opérations entre topic en temps réel: aggregation / jointure ...</li>
                     </ul>
                 </section>
+                <section>
+                    <h3>Cas d'utilisation - Consumer-SIG</h3>
+                    <img style="width: 70%;" data-src="img/bpweb.png">
+                </section>
+                <section>
+                    <h3>Cas d'utilisation - Consumer-SIG</h3>
+                    <img style="width: 70%;" data-src="img/consumer-SIG.png">
+                </section>
 				<!-- TEST -->
                 <section data-background-image="img/tests.png" data-background-opacity="0.15">
                     <h1>Tests</h1>
@@ -505,15 +513,15 @@ public class KafkaConsumerTest {
                     <h3>Problèmatique de la création de nouveaux topics</h3>
                     <ul>
                         <li>Tel que configuré Kafka laisse le producer crée automatiquement le topic s'il n'existe pas</li>
-                        <li>Duplication de la donnée</li>
-                        <li>Gouvernance</li>
+                        <li>Problème de duplication de la donnée</li>
+                        <li>Gouvernance à définir</li>
                     </ul>
                 </section>
                 <section>
-                    <h3>Solution</h3>
+                    <h3>Stratégie</h3>
                     <ul>
                         <li>Consulter le GLIA avant toute création de topic</li>
-                        <li>A venir : mise en place par le GLIA d'un référenciel des topicssur Confluence</li>
+                        <li>A venir : mise en place par le GLIA d'un référenciel des topics dans Confluence</li>
                     </ul>
                 </section>
                 <section>
@@ -528,6 +536,16 @@ public class KafkaConsumerTest {
 					<li>
 						<ul>OPTISEE</ul>
 					</li>
+                </section>
+                <section data-background-image="img/opt_kafka.jpg" data-background-opacity="0.1">
+                    <h4>Clients Kafka</h4>
+                        <ul>
+                            <li>CLIK</li>
+                            <li>SIG (BPWEB)</li>
+                            <li>REFCOM</li>
+                            <li>REFTEL</li>
+                            <li>OPTISEE</li>
+                        </ul>
                 </section>
             </div>
         </div>
