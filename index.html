@@ -23,6 +23,12 @@
 
                     <h1 style="text-shadow: 0px 0px 7px black">Spring for Apache Kafka</h1>
                 </section>
+                <section data-background-image="img/kafka-cas-usage.png" data-background-opacity="0.5">
+                    <ul>
+                        <li>Développé chez LinkedIn, et maintenu au sein de la fondation Apache depuis 2012.</li>
+                        <li>En 2014, plusieurs ingénieurs créateurs de Kafka chez LinkedIn créent une nouvelle société nommée Confluent5 avec pour axe le logiciel Kafka.</li>
+                    </ul>
+                </section>
                 <section>
                     <h3>Mais c’est quoi Apache Kafka ?</h3>
                     <ul>
@@ -64,7 +70,7 @@
                 <section>
                     <h2>RIP opt-kakfa</h2>
                     <ul>
-                        <li>Non maintenue</li>
+                        <li>Volonté de ne plus maintenir des lib "maison"</li>
                         <li>Abandon de la lib <span style="color: turquoise">opt-kafka</span> (utilisation de la lib Apache Kafka) au profit de <span style="color: chartreuse">Spring for Apache Kafka</span></li>
                     </ul>
                 </section>
@@ -228,7 +234,7 @@ public class ProducerService {
                     <h2>Consumer</h2>
                     <ul>
                         <li>Appartient à un consumer group name</li>
-                        <li>Chaque message publié dans un topic est délivré à un seul consumer d'un group name</li>
+                        <li>Chaque message publié dans un topic est consommé par un seul consumer d'un group name</li>
                     </ul>
                 </section>
                 <section>
@@ -291,7 +297,7 @@ private KafkaService kafkaService = Mockito.mock(KafkaService.class) ;
         List&lt;BoitePostaleKafkaDto&gt; dto = new ArrayList&lt;&gt;();
         dto.add(new  BoitePostaleKafkaDto());
         writer.write(dto);
-        
+
         Mockito.verify(kafkaService, Mockito.times(1)).push(any(), any());
     }
 
@@ -489,19 +495,31 @@ public class KafkaConsumerTest {
 
 					</code></pre>
 					</section>
+                    </code></pre>
                 </section>
                 <section>
-                    <h4>Problèmatique de la création de nouveaux topics</h4>
+                    <h3>Maintenance de Kafka</h3>
+                </section>
+                <section>
+                    <h3>Problèmatique de la création de nouveaux topics</h3>
                     <ul>
-                        <li>Le Producer crée automatiquement le topic s'il n'existe pas</li>
+                        <li>Tel que configuré Kafka laisse le producer crée automatiquement le topic s'il n'existe pas</li>
                         <li>Duplication de la donnée</li>
+                        <li>Gouvernance</li>
                     </ul>
                 </section>
                 <section>
-                    <h3>Gouvernance Kafka</h3>
+                    <h3>Solution</h3>
                     <ul>
-                        <li>Consultation du GLIA <span style="color: turquoise;">avant</span> toute création de topic</li>
-                        <li>A venir : mise en place par le GLIA d'un <span style="color: turquoise;">référentiel</span> des topics</li>
+                        <li>Consulter le GLIA avant toute création de topic</li>
+                        <li>A venir : mise en place par le GLIA d'un référenciel des topicssur Confluence</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Design for failure</h3>
+                    <ul>
+                        <li>Kakfa stocke 48h de données</li>
+                        <li>Le consumer doit savoir quel est le dernier offset traité avec succès.</li>
                     </ul>
                 </section>
                 <section data-background-image="img/optisee.PNG" data-background-opacity="0.1">
