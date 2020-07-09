@@ -24,7 +24,7 @@
 
                     <h1 style="text-shadow: 0px 0px 7px black">Spring for Apache Kafka</h1>
                 </section>
-                <section data-background-image="img/kafka-cas-usage.png" data-background-opacity="0.5">
+                <section data-background-image="img/kafka-cas-usage_opt.png" data-background-opacity="0.5">
                     <ul>
                         <li>Développé chez LinkedIn, et maintenu au sein de la fondation Apache depuis 2012.</li>
                         <li>Poussé par Confluent, plateforme créée autour de Kafka.</li>
@@ -33,7 +33,7 @@
                 <section>
                     <h3>Mais c’est quoi Apache Kafka ?</h3>
                     <ul>
-                        <li>Système de stockage de flux de messages (streams of records)</li>
+                        <li>Système de stockage de flux de  <span style="color: chartreuse">messages</span> (streams of records)</li>
                         <li>Asynchrone</li>
                         <li>Permet de gérer des gros volumes de données, faible latence</li>
                         <li>Tout en assurant une sécurité des données</li>
@@ -44,7 +44,7 @@
                     <h3>Messages</h3>
                     <ul>
                         <li>Composés d’une valeur, d’une clé, et d’un timestamp</li>
-                        <li>Sont organisés en catégories appelées topics</li>
+                        <li>Sont organisés en catégories appelées  <span style="color: chartreuse">topics</span></li>
                     </ul>
                 </section>
                 <section>
@@ -55,19 +55,19 @@
                     <section>
                         <ul>
                             <li>Les topics ne sont pas modifiables à l’exception de l’ajout de messages à la fin</li>
-                            <li>Le producer ajoute des messages à la fin des topics de son choix</li>
-                            <li>Le consumer lit des topics toujours dans l’ordre, c’est-à-dire du plus ancien message au plus récent</li>
+                            <li>Le  <span style="color: chartreuse">producer</span> ajoute des messages à la fin des topics de son choix</li>
+                            <li>Le  <span style="color: chartreuse">consumer</span> lit des topics toujours dans l’ordre, c’est-à-dire du plus ancien message au plus récent</li>
                         </ul>
                     </section>
                 </section>
                 <section>
                     <h4>Plateforme de streaming distribuée</h4>
-                    <img style="width: 70%; -webkit-filter:drop-shadow(0px 0px 3px white); filter:drop-shadow(0px 0px 3px white);" data-src="img/kafka-apis.png">
+                    <img style="width: 70%; -webkit-filter:drop-shadow(0px 0px 3px white); filter:drop-shadow(0px 0px 3px white);" data-src="img/kafka-apis_connectors.png">
                 </section>
                 <section>
                     <h2>RIP opt-kakfa</h2>
                     <ul>
-                        <li>Volonté de ne plus maintenir des lib "maison"</li>
+                        <li>Nouvelle stratégie SMO : ne plus maintenir de lib "maison"</li>
                         <li>Abandon de la lib <span style="color: turquoise">opt-kafka</span> (utilisation de la lib Apache Kafka) au profit de <span style="color: chartreuse">Spring for Apache Kafka</span></li>
                     </ul>
                 </section>
@@ -112,7 +112,7 @@ services:
                     <ul>
                         <li>Produit des données sur les topics</li>
 <!--                        <li>Il est responsable d'assigner la données à une partition du topic</li>-->
-                        <li>Peut attendre un ACK pour savoir si la donnée a bien été transmise</li>
+                        <li>Peut attendre un ACK (accusé réception) pour savoir si la donnée a bien été transmise</li>
                     </ul>
                 </section>
 
@@ -509,9 +509,8 @@ public class KafkaConsumerTest {
                 <section>
                     <h3>Problèmatique de la création de nouveaux topics</h3>
                     <ul>
-                        <li>Tel que configuré Kafka laisse le producer crée automatiquement le topic s'il n'existe pas</li>
-                        <li>Problème de duplication de la donnée</li>
-                        <li>Gouvernance à définir</li>
+                        <li>Tel que configuré, Kafka laisse le producer créer automatiquement le topic s'il n'existe pas</li>
+                        <li>Risque de duplication de la donnée</li>
                     </ul>
                 </section>
                 <section>
@@ -524,7 +523,8 @@ public class KafkaConsumerTest {
                 <section>
                     <h3>Design for failure</h3>
                     <ul>
-                        <li>Kakfa stocke 48h de données</li>
+                        <li>De plus en plus de clients Kafka vont etre développés</li>
+                        <li>Kakfa ne stocke que 48h de données</li>
                         <li>Le consumer doit savoir quel est le dernier offset traité avec succès.</li>
                     </ul>
                 </section>
@@ -542,7 +542,16 @@ public class KafkaConsumerTest {
                             <li>REFCOM</li>
                             <li>REFTEL</li>
                             <li>OPTISEE</li>
+                            <li>...</li>
                         </ul>
+                </section>
+                <section data-background-image="img/livedemo.png" style="width: 70%" data-background-opacity="0.1">
+                   <h3>Démo</h3>
+                    <ul>
+                        <li>Producer</li>
+                        <li>Consumer</li>
+                        <li>KStream</li>
+                    </ul>
                 </section>
             </div>
         </div>
