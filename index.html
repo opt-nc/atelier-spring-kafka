@@ -284,7 +284,7 @@ public class KafkaConsumer {
                     </section>
                     <!-- opt-kafka -->
 					<section data-background-image="img/opt_kafka.jpg" data-background-opacity="0.07">
-						Exemple actuel
+						Exemple <span style="color: turquoise">opt-kafka</span>
                         <pre><code class="java" data-line-numbers="5|15-19|21">public class BPWriterTest {
 
 private BPWriter writer;
@@ -385,7 +385,7 @@ public class KafkaServiceTest {
 						</code>
 					</section>
 					<section data-background-image="img/opt_kafka.jpg" data-background-opacity="0.07">
-						Exemple actuel
+						Exemple <span style="color: turquoise">opt-kafka</span>
 						<pre><code class="java" data-line-numbers="7-16|23-29">public class EsiriusTaskTest {
 
     private EsiriusTask task;
@@ -505,12 +505,13 @@ public class KafkaConsumerTest {
                     </code></pre>
                 </section>
                 <section>
-                    <h3>Maintenance de Kafka</h3>
+                    <h2>Maintenance de Kafka</h2>
                     <ul>
                         <li>Disponibilité</li>
                         <li>Méthode d'upgrade</li>
                         <li>Maintenance consumers</li>
                     </ul>
+                    <h5 style="color: yellow;margin-top: 15px;">Prochain Upgrade 2.4.1 > 2.5.0</h5>
                 </section>
                 <section>
                     <h3>Problèmatique de la création de nouveaux topics</h3>
@@ -563,7 +564,7 @@ public class KafkaConsumerTest {
                     <section data-background-image="img/livedemo.png" data-background-opacity="0.02">
                         <h3>Producer</h3>
                         <img data-src="img/livedemoProducer.png">
-                        <pre><code class="json">{
+                        <pre><code>{
     "id": 123465,
     "author": "MailBatch1",
     "subject": "1er message dans Kafka",
@@ -580,9 +581,21 @@ public class KafkaConsumerTest {
                         <h3>KStream</h3>
                         <img data-src="img/livedemoKStream.png">
                         <pre><code># sms
-{"phoneNumberEmitter":"410808", "message":"Coucou !", "phoneNumberReceiver":"907256"}</code></pre>
+{"phoneNumberEmitter":"112233", "message":"Coucou !", "phoneNumberReceiver":"907256"}</code></pre>
                         <pre><code># user
 {"phoneNumber":"112233", "firstName":"Hubert", "lastName":"Bonisseur de la Bath"}</code></pre>
+                    </section>
+                    <section data-background-image="img/livedemo.png" data-background-opacity="0.02">
+                        <h3>KStream</h3>
+                        <img data-src="img/livedemoKStream2.png">
+                        <pre><code># sms enrichi
+{
+    "firstNameEmitter":"Hubert",
+    "lastNameEmitter":"Bonisseur de la Bath",
+    "phoneNumberEmitter":"112233",
+    "message":"Coucou !",
+    "phoneNumberReceiver":"907256"
+}</code></pre>
                     </section>
                 </section>
             </div>
