@@ -71,7 +71,7 @@
                         <li>Abandon de la lib <span style="color: turquoise">opt-kafka</span> (utilisation de la lib Apache Kafka) au profit de <span style="color: chartreuse">Spring for Apache Kafka</span></li>
                     </ul>
                 </section>
-                <section data-background-image="img/springKafka.png" data-background-opacity="0.03">
+                <section data-background-image="img/spring.png" data-background-opacity="0.05">
                     <h3>Spring Apache for Kafka</h3>
                     MAVEN
 <pre><code class="xml"><dependency>
@@ -281,8 +281,9 @@ public class KafkaConsumer {
                 <section>
 					<section>
 						<h1>Producer</h1>
-					</section>
-					<section>
+                    </section>
+                    <!-- opt-kafka -->
+					<section data-background-image="img/opt_kafka.jpg" data-background-opacity="0.07">
 						Exemple actuel
                         <pre><code class="java" data-line-numbers="5|15-19|21">public class BPWriterTest {
 
@@ -308,9 +309,9 @@ private KafkaService kafkaService = Mockito.mock(KafkaService.class) ;
     }
 
 }</code></pre>
-					</section>
+                    </section>
 					<section data-background-image="img/spring.png" data-background-opacity="0.1">
-						Exemple spring-kafka-test
+						Exemple <span style="color: yellow;">@EmbeddedKafka</span>
                     	<pre><code data-line-numbers="1-5|15-16|44-51|29|36-40">@RunWith(SpringRunner.class)
 @EmbeddedKafka(topics = {"${opt.kafka.topics.message}"})
 @SpringBootTest(
@@ -383,7 +384,7 @@ public class KafkaServiceTest {
 							<h1>Consumer</h1>
 						</code>
 					</section>
-					<section>
+					<section data-background-image="img/opt_kafka.jpg" data-background-opacity="0.07">
 						Exemple actuel
 						<pre><code class="java" data-line-numbers="7-16|23-29">public class EsiriusTaskTest {
 
@@ -433,7 +434,7 @@ public class KafkaServiceTest {
 }</code></pre>
 					</section>
 					<section data-background-image="img/spring.png" data-background-opacity="0.1">
-					Exemple spring-kafka-test
+                        Exemple <span style="color: yellow">@EmbeddedKafka</span>
                     <pre><code data-line-numbers="1-5|47-51|38|40-41">@RunWith(SpringRunner.class)
 @EmbeddedKafka(topics = {"${opt.kafka.topics.message}"})
 @SpringBootTest(
@@ -529,10 +530,10 @@ public class KafkaConsumerTest {
                     </ul>
                 </section>
                 <section data-background-image="img/optisee.PNG" data-background-opacity="0.1">
-					<h4>Projet utilisant <span style="color: chartreuse">org.springframework.kafka</span></h4>
-					<li>
-						<ul>OPTISEE</ul>
-					</li>
+                    <h4>Projet utilisant <span style="color: chartreuse">org.springframework.kafka</span></h4>
+                    <li>
+                        <ul>OPTISEE</ul>
+                    </li>
                 </section>
                 <section data-background-image="img/opt_kafka.jpg" data-background-opacity="0.1">
                     <h4>Clients Kafka</h4>
@@ -545,13 +546,39 @@ public class KafkaConsumerTest {
                             <li>...</li>
                         </ul>
                 </section>
-                <section data-background-image="img/livedemo.png" style="width: 70%" data-background-opacity="0.1">
-                   <h3>Démo</h3>
-                    <ul>
-                        <li>Producer</li>
-                        <li>Consumer</li>
-                        <li>KStream</li>
-                    </ul>
+                <section>
+                    <section data-background-image="img/livedemo.png" data-background-opacity="0.1">
+                    <h2>Démo</h2>
+                        <ul>
+                            <li>Producer</li>
+                            <li>Consumer</li>
+                            <li>KStream</li>
+                        </ul>
+                    </section>
+                    <section data-background-image="img/livedemo.png" data-background-opacity="0.02">
+                        <h3>Producer</h3>
+                        <img data-src="img/livedemoProducer.png">
+                        <pre><code class="json">{
+    "id": 123465,
+    "author": "MailBatch1",
+    "subject": "1er message dans Kafka",
+    "recipient": "DSI_GLOBAL",
+    "body": "Incident !"
+}</code></pre>
+                    </section>
+                    <section data-background-image="img/livedemo.png" data-background-opacity="0.02">
+                        <h3>Consumer</h3>
+                        <img data-src="img/livedemoConsumer.png">
+                        <pre><code>log.info("Reception message de messageListener : [{}]", messageDTO);</code></pre>
+                    </section>
+                    <section data-background-image="img/livedemo.png" data-background-opacity="0.02">
+                        <h3>KStream</h3>
+                        <img data-src="img/livedemoKStream.png">
+                        <pre><code># sms
+{"phoneNumberEmitter":"410808", "message":"Coucou !", "phoneNumberReceiver":"907256"}</code></pre>
+                        <pre><code># user
+{"phoneNumber":"112233", "firstName":"Hubert", "lastName":"Bonisseur de la Bath"}</code></pre>
+                    </section>
                 </section>
             </div>
         </div>
@@ -567,9 +594,12 @@ public class KafkaConsumerTest {
             // - https://revealjs.com/config/
             Reveal.initialize({
                 hash: true,
+                slideNumber: 'c/t',
                 verticator: { darktheme: true },
+                allottedTime: 30 * 60 * 1000, // 30 minutes
                 // Learn about plugins: https://revealjs.com/plugins/
-                plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, Verticator ]
+                plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, Verticator ],
+                dependencies: [{ src: 'plugin/elapsed-time-bar/elapsed-time-bar.js' }]
             });
         </script>
     </body>
