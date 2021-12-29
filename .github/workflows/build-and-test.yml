@@ -1,0 +1,26 @@
+name: Test
+
+on:
+  push:
+    branches: main
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ['8', '17']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK ${{ matrix.Java }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.Java }}
+          distribution: 'adopt'
+          cache: 'maven'
+
+      - name: Test with Maven
+        run: mvn -B verify
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
