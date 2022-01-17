@@ -1,8 +1,8 @@
 package nc.opt.springkafka.web.rest;
 
+import nc.opt.springkafka.dto.MessageDTO;
 import nc.opt.springkafka.dto.SmsDTO;
 import nc.opt.springkafka.service.KafkaService;
-import nc.opt.springkafka.dto.MessageDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
