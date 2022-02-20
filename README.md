@@ -1,4 +1,5 @@
-[![Project Website](https://img.shields.io/badge/Project%20Website-atelier--spring--kafka-informational)](https://opt-nc.github.io/atelier-spring-kafka/)
+[![Project Website](https://img.shields.io/badge/Project%20Website-atelier--spring--kafka-informational)](https://opt-nc.github.io/atelier-spring-kafka/) [![Confluent tutorial](https://img.shields.io/badge/Confluent%20tutorial-Best%20Tutorials%20for%20Getting%20Started%20with%20Apache%20Kafka-blue)](https://www.confluent.io/blog/best-tutorials-for-getting-started-with-apache-kafka/)
+
 
 # atelier spring kafka 
 
