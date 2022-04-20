@@ -1,14 +1,13 @@
 package nc.opt.springkafka;
 
-import nc.opt.springkafka.consumer.KafkaConsumer;
-import nc.opt.springkafka.dto.MessageDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nc.opt.springkafka.consumer.KafkaConsumer;
+import nc.opt.springkafka.dto.MessageDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
@@ -19,7 +18,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Map;
 import java.util.UUID;
@@ -27,11 +26,11 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @EmbeddedKafka(topics = {"${opt.kafka.topics.message}"})
 @SpringBootTest(
         properties = "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
         classes = {KafkaConsumer.class, KafkaAutoConfiguration.class})
+@DirtiesContext
 public class KafkaConsumerTest {
 
     @Autowired
@@ -66,8 +65,8 @@ public class KafkaConsumerTest {
 
         kafkaTemplate.send(record);
 
-        kafkaConsumer.getLatch().await(10000, TimeUnit.MILLISECONDS);
-        assertThat(kafkaConsumer.getLatch().getCount()).isEqualTo(0);
+        kafkaConsumer.getLatch().await(10_000L, TimeUnit.MILLISECONDS);
+        assertThat(kafkaConsumer.getLatch().getCount()).isEqualTo(0L);
 
     }
 

@@ -17,6 +17,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.junit.Assert;
 
@@ -27,11 +28,11 @@ import static org.springframework.kafka.test.hamcrest.KafkaMatchers.hasKey;
 import static org.springframework.kafka.test.hamcrest.KafkaMatchers.hasValue;
 import static org.springframework.kafka.test.utils.KafkaTestUtils.getSingleRecord;
 
-@RunWith(SpringRunner.class)
 @EmbeddedKafka(topics = {"${opt.kafka.topics.message}"})
 @SpringBootTest(
         properties = "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}",
         classes = {KafkaService.class, KafkaAutoConfiguration.class})
+@DirtiesContext
 public class KafkaServiceTest {
 
     @Value(value = "${opt.kafka.topics.message}")
