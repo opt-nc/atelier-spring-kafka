@@ -3,7 +3,7 @@
 
 # ❔ A propos
 
-Ce projet explique comment développer un producer/consumer sans la lib interne historrique, 
+Ce projet explique comment développer un producer/consumer sans la lib interne historique, 
 au profit de celle [développée et maintenue par Spring](https://spring.io/projects/spring-kafka).
 
 ## 📝 Description
@@ -55,3 +55,4 @@ Le script `sendSMSDaemon.sh` *(ressources/pre-init)* envoie toutes les 2 seconde
 - [`docker-compose`](https://docs.docker.com/compose/)
 - [`jq`](https://stedolan.github.io/jq/)
 - [Migraton vers l'image `Bitnami`](https://dev.to/optnc/kafka-image-wurstmeister-vs-bitnami-efg)
+- [DZONE Article : What Is Kafka? Everything You Need to Know](https://dzone.com/articles/what-is-kafka?edition=738693)
