@@ -48,6 +48,20 @@ Le script `sendSMSDaemon.sh` *(ressources/pre-init)* envoie toutes les 2 seconde
 
 **Important : Nécessite la commande `jq`**
 
+
+## Recommandations
+
+Dernièrement une passe d'alignement des conf des producers et consumers a été opérée par le GLIA, car beaucoup de 
+projets ont été développés par copier/coller par peur de mal faire. 
+
+Voici quelques recommendations :
+- `acks=all` : c'est maintenant la valeur par défaut, donc inutile de positionner
+- `retries=1` : la valeur par défaut est maintenant énorme pour faire des retries quasi indéfiniment, donc inutile de positionner
+- `max.in.flight.requests.per.connection=1` : il s'agissait de garantir l'ordre des messages en cas de retry. Je pense que ce [besoin](https://www.confluent.io/blog/exactly-once-semantics-are-possible-heres-how-apache-kafka-does-it/) est rare et que cette conf ne doit pas être généralisée car on n'a pas la valeur par défaut (5 aujourd'hui)
+- `max.request.size`>valeur par défaut : ce besoin est réel sur de très rares cas comme le 'producer-otrs' étant donné que l'on a mis les pièces jointes dans le message kafka, mais c'est très rare et doit être supprimé quand ce n'est pas nécessaire car comme toute limite configurable, c'est un garde fou et le fait de le configurer alors que ce n'est pas nécessaire peut induire en erreur
+- `activer les logs Kafka en INFO` : par défaut elles sont actives mais on les a désactivés dans pas mal de projets. Aujourd'hui elles manquent cruellement et elles ne sont pas si fréquentes
+- utiliser le plus possible la configuration via le fichier de conf yaml.
+
 ## 🔖 Liens utiles
 
 - [Spring for Apache Kafka](https://docs.spring.io/spring-kafka/reference/html/)
