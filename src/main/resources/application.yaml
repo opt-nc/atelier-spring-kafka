@@ -1,0 +1,25 @@
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+    streams:
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.timestamp.extractor: org.apache.kafka.streams.processor.WallclockTimestampExtractor
+        commit.interval.ms: 1000
+      application-id: smsApp
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+opt:
+  kafka:
+    topics:
+      message: demo.message
+      sms: demo.sms
+      user: demo.user

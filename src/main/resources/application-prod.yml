@@ -1,0 +1,14 @@
+---
+# ===================================================================
+# Spring Boot configuration for the "prod" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS_HOST}
+    streams:
+      replication-factor: ${KAFKA_REPLICATION_FACTOR}
+      bootstrap-servers: ${KAFKA_BROKERS_HOST}
+      state-dir: ${KAFKA_STATE_DIR}

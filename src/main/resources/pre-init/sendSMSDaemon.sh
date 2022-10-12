@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # name : sendSMSDaemon
@@ -14,7 +14,10 @@ urlKafkaApi="http://localhost:8080/kafka/sms/send"
 # 112233|{"phoneNumber":"112233", "firstName":"Hubert", "lastName":"Bonisseur de la Bath"}
 # 998877|{"phoneNumber":"998877", "firstName":"Jean", "lastName":"Soudajman"}
 # 446655|{"phoneNumber":"446655", "firstName":"Henri", "lastName":"Tathan"}
-phoneNumbers=("112233" "446655" "998877")
+
+phoneNumbers[0]="112233"
+phoneNumbers[1]="446655"
+phoneNumbers[2]="998877"
 
 # main
 while true; do
