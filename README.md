@@ -15,6 +15,12 @@ Projet d'exemple d'utilisation de la lib [`org.springframework.kafka:spring-kafk
 - Instance `kafka`
 - `docker` & `docker-compose` (si utilisation de `kafka.yml`)
 
+## 👶 Kafka ?! WTF ❔
+
+Avant de passer à la suite, prendre soin de consulter les ressources ci-dessous:
+
+- 🎥 [Comprendre ce qu'est Kafka en 6 minutes](https://youtu.be/Ch5VhJzaoaI)
+
 ## :student: Supports custome
 
 - [⌨️ Pipe xlsx files into/from Kafka... From cli with (k)cat 🙀](https://dev.to/optnc/pipe-xlsx-files-intofrom-kafka-from-cli-with-kcat-plp)
