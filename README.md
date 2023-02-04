@@ -20,6 +20,7 @@ Projet d'exemple d'utilisation de la lib [`org.springframework.kafka:spring-kafk
 Avant de passer à la suite, prendre soin de consulter les ressources ci-dessous:
 
 - 🎥 [Comprendre ce qu'est Kafka en 6 minutes](https://youtu.be/Ch5VhJzaoaI)
+- 📝 [The Apache Kafka Handbook (freecodecamp)](https://www.freecodecamp.org/news/apache-kafka-handbook/)
 
 ## :student: Supports custome
 
