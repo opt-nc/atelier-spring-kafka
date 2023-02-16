@@ -80,3 +80,4 @@ Voici quelques recommendations :
 - [`jq`](https://stedolan.github.io/jq/)
 - [Migraton vers l'image `Bitnami`](https://dev.to/optnc/kafka-image-wurstmeister-vs-bitnami-efg)
 - [DZONE Article : What Is Kafka? Everything You Need to Know](https://dzone.com/articles/what-is-kafka?edition=738693)
+- [A comparison of ActiveMQ and Kafka](https://developers.redhat.com/articles/2023/02/16/comparison-activemq-and-kafka)
