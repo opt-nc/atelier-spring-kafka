@@ -6,6 +6,11 @@
 Ce projet explique comment développer un producer/consumer sans la lib interne historique, 
 au profit de celle [développée et maintenue par Spring](https://spring.io/projects/spring-kafka).
 
+# ✋Pourquoi Kafka
+
+![image](https://user-images.githubusercontent.com/5235127/220445922-ec89e56c-6880-4b79-b8f3-5221142d1dee.png)
+
+
 ## 📝 Description
 
 Projet d'exemple d'utilisation de la lib [`org.springframework.kafka:spring-kafka`](https://spring.io/projects/spring-kafka)
@@ -74,10 +79,16 @@ Voici quelques recommendations :
 
 ## 🔖 Liens utiles
 
+### 🧰 Tools
+
 - [Spring for Apache Kafka](https://docs.spring.io/spring-kafka/reference/html/)
 - [`docker`](https://docs.docker.com/get-docker/)
 - [`docker-compose`](https://docs.docker.com/compose/)
 - [`jq`](https://stedolan.github.io/jq/)
+
+### 📝 Articles recommandés
+
 - [Migraton vers l'image `Bitnami`](https://dev.to/optnc/kafka-image-wurstmeister-vs-bitnami-efg)
 - [DZONE Article : What Is Kafka? Everything You Need to Know](https://dzone.com/articles/what-is-kafka?edition=738693)
 - [A comparison of ActiveMQ and Kafka](https://developers.redhat.com/articles/2023/02/16/comparison-activemq-and-kafka)
+- [Google Cloud Community :: Application Integration: Integration over Kafka](https://www.googlecloudcommunity.com/gc/Integration-Services/Application-Integration-Integration-over-Kafka/m-p/523518/thread-id/105)
