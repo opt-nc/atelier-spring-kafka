@@ -1,13 +1,13 @@
 package nc.opt.springkafka;
 
-import nc.opt.springkafka.service.KafkaService;
 import nc.opt.springkafka.dto.MessageDTO;
+import nc.opt.springkafka.service.KafkaService;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
@@ -18,9 +18,9 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.junit.Assert;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -64,7 +64,7 @@ public class KafkaServiceTest {
         String key = result.getProducerRecord().key();
 
         embeddedKafka.consumeFromEmbeddedTopics(consumer, messageTopic);
-        final ConsumerRecord<String, String> record = getSingleRecord(consumer, messageTopic, 10_000);
+        final ConsumerRecord<String, String> record = getSingleRecord(consumer, messageTopic, Duration.of(10_000, ChronoUnit.MILLIS));
 
         assertThat(record, hasValue(value));
         assertThat(record, hasKey(key));
