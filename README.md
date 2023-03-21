@@ -47,13 +47,12 @@ Créer le producer :
 kafka-console-producer.sh --broker-list kafka:9092 --topic demo.user --property "parse.key=true" --property "key.separator=|"
 ```
 
-Copier les lignes **(inclure la dernière ligne vide)** :
+Copier les lignes :
 
 ```
 112233|{"phoneNumber":"112233", "firstName":"Hubert", "lastName":"Bonisseur de la Bath"}
 998877|{"phoneNumber":"998877", "firstName":"Jean", "lastName":"Soudajman"}
 446655|{"phoneNumber":"446655", "firstName":"Henri", "lastName":"Tathan"}
-
 ```
 
 ### 2️⃣ Ecriture automatique dans le topic `demo.sms`

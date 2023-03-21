@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import nc.opt.springkafka.dto.MessageDTO;
 import nc.opt.springkafka.dto.SmsDTO;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.errors.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,8 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class KafkaService {
@@ -38,43 +41,39 @@ public class KafkaService {
     // Envoi synchrone du message
     // Le producer attend la réponse de Kafka
     public SendResult<String, String> push(MessageDTO messageDTO) {
+        String json = "";
         try {
-            String json = objectMapper.writeValueAsString(messageDTO);
+            json = objectMapper.writeValueAsString(messageDTO);
             String uuid = UUID.randomUUID().toString();
 
-            ProducerRecord<String, String> record = new ProducerRecord<>(messageTopic, uuid, json);
+            final ProducerRecord<String, String> record = new ProducerRecord<>(messageTopic, uuid, json);
             return kafkaTemplate.send(record).get();
 
-        } catch (Exception e) {
-            log.error("Erreur lors de l'envoi dans kafka de [{}]", messageDTO);
+        } catch (ExecutionException e) {
+            handleFailure(json, e.getCause());
+        }
+        catch (TimeoutException | InterruptedException e) {
+            handleFailure(json, e.getCause());
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     // Envoi asynchrone du message
     public void pushAsync(MessageDTO messageDTO) {
 
-        String json = null;
         try {
-            json = objectMapper.writeValueAsString(messageDTO);
-
+            final String json = objectMapper.writeValueAsString(messageDTO);
             String uuid = UUID.randomUUID().toString();
 
-            ListenableFuture<SendResult<String, String>> future =
-                    kafkaTemplate.send(messageTopic, json);
-
-            String finalJson = json;
-            future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-
-                @Override
-                public void onSuccess(SendResult<String, String> result) {
-                    System.out.println("Sent message=[" + finalJson +
-                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(messageTopic, uuid, json);
+            future.whenComplete((result, ex) -> {
+                if (ex == null) {
+                    handleSuccess(json, result);
                 }
-                @Override
-                public void onFailure(Throwable ex) {
-                    System.out.println("Unable to send message=["
-                            + finalJson + "] due to : " + ex.getMessage());
+                else {
+                    handleFailure(json, ex.getCause());
                 }
             });
 
@@ -83,17 +82,27 @@ public class KafkaService {
         }
     }
 
+    private void handleSuccess(String data, SendResult<String, String> result){
+        System.out.println("Sent message=[" + data +
+                "] with offset=[" + result.getRecordMetadata().offset() + "]");
+    }
+
+    private void handleFailure(String data, Throwable ex){
+        System.out.println("Unable to send message=["
+                + data + "] due to : " + ex.getMessage());
+    }
+
     public SendResult<String, String> pushSms(SmsDTO smsDTO) {
-        try {
+       try {
             String json = objectMapper.writeValueAsString(smsDTO);
             String key = smsDTO.getPhoneNumberEmitter();
 
             ProducerRecord<String, String> record = new ProducerRecord<>(smsTopic, key, json);
             return kafkaTemplate.send(record).get();
 
-        } catch (Exception e) {
+       } catch (Exception e) {
             log.error("Erreur lors de l'envoi de SMS dans kafka de [{}]", smsDTO);
             throw new RuntimeException(e);
-        }
+       }
     }
 }
