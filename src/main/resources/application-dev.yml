@@ -5,6 +5,7 @@
 # This configuration overrides the application.yml file.
 # ===================================================================
 
+
 logging:
   level:
     ROOT: INFO
@@ -16,3 +17,5 @@ spring:
     streams:
       bootstrap-servers: localhost:9092
       state-dir: ./state-dir/kafka
+server:
+  port: 8081
